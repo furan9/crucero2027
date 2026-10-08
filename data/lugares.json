@@ -1,0 +1,247 @@
+{
+  "regiones": {
+    "barcelona": {
+      "nombre": "Barcelona (puerto)",
+      "centro": [
+        2.17,
+        41.36
+      ],
+      "zoom": 12,
+      "mb": 13
+    },
+    "tunez": {
+      "nombre": "Túnez: La Goulette, Cartago, Sidi Bou Said",
+      "centro": [
+        10.32,
+        36.845
+      ],
+      "zoom": 12,
+      "mb": 2.7
+    },
+    "palermo": {
+      "nombre": "Palermo y Mondello",
+      "centro": [
+        13.35,
+        38.14
+      ],
+      "zoom": 12,
+      "mb": 5.3
+    },
+    "napoles": {
+      "nombre": "Nápoles",
+      "centro": [
+        14.26,
+        40.845
+      ],
+      "zoom": 13,
+      "mb": 5.0
+    },
+    "pompeya": {
+      "nombre": "Pompeya",
+      "centro": [
+        14.485,
+        40.75
+      ],
+      "zoom": 14,
+      "mb": 2.3
+    },
+    "livorno": {
+      "nombre": "Livorno",
+      "centro": [
+        10.3,
+        43.55
+      ],
+      "zoom": 13,
+      "mb": 2.8
+    },
+    "marsella": {
+      "nombre": "Marsella",
+      "centro": [
+        5.37,
+        43.295
+      ],
+      "zoom": 13,
+      "mb": 11
+    },
+    "florencia": {
+      "nombre": "Florencia (opción desde Livorno)",
+      "centro": [
+        11.2555,
+        43.7715
+      ],
+      "zoom": 14,
+      "mb": 6.5
+    }
+  },
+  "escalas": {
+    "tunez": [
+      "tunez"
+    ],
+    "palermo": [
+      "palermo"
+    ],
+    "napoles": [
+      "napoles",
+      "pompeya"
+    ],
+    "livorno": [
+      "livorno",
+      "florencia"
+    ],
+    "marsella": [
+      "marsella"
+    ]
+  },
+  "lugares": [
+    {
+      "region": "barcelona",
+      "nombre": "Terminal MSC, Moll Adossat (aprox.)",
+      "lat": 41.35,
+      "lon": 2.164
+    },
+    {
+      "region": "tunez",
+      "nombre": "Puerto de La Goulette (aprox.)",
+      "lat": 36.819,
+      "lon": 10.305
+    },
+    {
+      "region": "tunez",
+      "nombre": "Cartago (Termas de Antonino)",
+      "lat": 36.8528,
+      "lon": 10.3306
+    },
+    {
+      "region": "tunez",
+      "nombre": "Sidi Bou Said",
+      "lat": 36.8714,
+      "lon": 10.3417
+    },
+    {
+      "region": "palermo",
+      "nombre": "Puerto de Palermo (aprox.)",
+      "lat": 38.125,
+      "lon": 13.369
+    },
+    {
+      "region": "palermo",
+      "nombre": "Catedral",
+      "lat": 38.1142,
+      "lon": 13.3563
+    },
+    {
+      "region": "palermo",
+      "nombre": "Quattro Canti",
+      "lat": 38.1157,
+      "lon": 13.3613
+    },
+    {
+      "region": "palermo",
+      "nombre": "Mercado de Ballarò",
+      "lat": 38.1118,
+      "lon": 13.3598
+    },
+    {
+      "region": "palermo",
+      "nombre": "Playa de Mondello",
+      "lat": 38.2,
+      "lon": 13.327
+    },
+    {
+      "region": "napoles",
+      "nombre": "Puerto de Nápoles (aprox.)",
+      "lat": 40.837,
+      "lon": 14.259
+    },
+    {
+      "region": "napoles",
+      "nombre": "Estación Napoli Garibaldi",
+      "lat": 40.8531,
+      "lon": 14.272
+    },
+    {
+      "region": "pompeya",
+      "nombre": "Pompei Scavi (estación)",
+      "lat": 40.7485,
+      "lon": 14.4837
+    },
+    {
+      "region": "pompeya",
+      "nombre": "Entrada Porta Marina (aprox.)",
+      "lat": 40.7497,
+      "lon": 14.4833
+    },
+    {
+      "region": "livorno",
+      "nombre": "Puerto de Livorno (aprox.)",
+      "lat": 43.5535,
+      "lon": 10.2992
+    },
+    {
+      "region": "marsella",
+      "nombre": "Terminal de cruceros (aprox.)",
+      "lat": 43.305,
+      "lon": 5.364
+    },
+    {
+      "region": "marsella",
+      "nombre": "Puerto Viejo",
+      "lat": 43.2951,
+      "lon": 5.374
+    },
+    {
+      "region": "marsella",
+      "nombre": "Notre-Dame de la Garde",
+      "lat": 43.284,
+      "lon": 5.3714
+    },
+    {
+      "region": "marsella",
+      "nombre": "Le Panier",
+      "lat": 43.2998,
+      "lon": 5.3687
+    },
+    {
+      "region": "livorno",
+      "nombre": "Estación Livorno Centrale (aprox.)",
+      "lat": 43.5547,
+      "lon": 10.3116
+    },
+    {
+      "region": "florencia",
+      "nombre": "Estación Santa Maria Novella (SMN)",
+      "lat": 43.7765,
+      "lon": 11.248
+    },
+    {
+      "region": "florencia",
+      "nombre": "Mercato Centrale",
+      "lat": 43.7766,
+      "lon": 11.2538
+    },
+    {
+      "region": "florencia",
+      "nombre": "Duomo (Santa Maria del Fiore)",
+      "lat": 43.7731,
+      "lon": 11.256
+    },
+    {
+      "region": "florencia",
+      "nombre": "Piazza della Signoria",
+      "lat": 43.7696,
+      "lon": 11.2556
+    },
+    {
+      "region": "florencia",
+      "nombre": "Ponte Vecchio",
+      "lat": 43.768,
+      "lon": 11.2531
+    },
+    {
+      "region": "florencia",
+      "nombre": "Galería Uffizi",
+      "lat": 43.7678,
+      "lon": 11.2553
+    }
+  ]
+}

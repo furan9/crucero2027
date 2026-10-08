@@ -1,0 +1,9 @@
+# No publicar
+crucero_app_brief.md
+crucero-offline.html
+tools/
+maps/valladolid.pmtiles
+node_modules/
+data-src/
+.env
+.env.*
