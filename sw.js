@@ -1,4 +1,4 @@
-const CACHE = 'crucero-v13';
+const CACHE = 'crucero-v14';
 const MAPCACHE = 'crucero-maps-v1';
 const ASSETS = [
   './', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png',
@@ -20,6 +20,7 @@ self.addEventListener('activate', (e) => {
 // Cache primero; si hay red, se actualiza en segundo plano.
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  if (new URL(e.request.url).origin !== self.location.origin) return;
   if (new URL(e.request.url).pathname.endsWith('.pmtiles')) return e.respondWith(mapa(e.request));
   e.respondWith(
     caches.match(e.request, { ignoreSearch: true }).then((hit) => {

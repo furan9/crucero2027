@@ -228,7 +228,7 @@ function viewChecklist() {
       html += `<label class="card chk ${st[c.id] ? 'done' : ''}"><input type="checkbox" data-chk="${esc(c.id)}" ${st[c.id] ? 'checked' : ''}><span>${esc(c.texto)}</span></label>`;
     }
   });
-  return html + '<button class="btn sec" id="compartirck">📤 Compartir estado por WhatsApp</button>';
+  return html + `<div class="muted" id="syncstate" style="margin:8px 0">${esc(syncEstado)}</div><button class="btn sec" id="compartirck">📤 Compartir estado por WhatsApp</button>`;
 }
 
 function estadoTexto() {
@@ -277,10 +277,96 @@ const VIEWS = {
   info: ['Info', viewInfo],
 };
 
+/* ---------- Sincronización del checklist ---------- */
+// Las marcas se guardan en el móvil ('check' = valor, 'checkt' = hora del último cambio) y, si hay
+// conexión y configuración, se fusionan con estado.json de un repositorio de GitHub (gana el cambio más reciente).
+
+let syncTimer = null;
+let syncBusy = false;
+let syncEstado = '';
+
+const enc64 = (o) => btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+const dec64j = (b) => JSON.parse(decodeURIComponent(escape(atob(b.replace(/\s/g, '')))));
+
+async function ghEstado(metodo, datos, sha) {
+  const c = D.config;
+  const url = `${c.api || 'https://api.github.com'}/repos/${c.repo}/contents/estado.json`;
+  const h = { Authorization: `Bearer ${c.token}`, Accept: 'application/vnd.github+json' };
+  if (metodo === 'GET') {
+    const r = await fetch(url, { headers: h, cache: 'no-store' });
+    if (r.status === 404) return { sha: null, data: {} };
+    if (!r.ok) throw new Error(`GET ${r.status}`);
+    const j = await r.json();
+    return { sha: j.sha, data: dec64j(j.content) };
+  }
+  const body = { message: 'estado checklist', content: enc64(datos) };
+  if (sha) body.sha = sha;
+  const r = await fetch(url, { method: 'PUT', headers: { ...h, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  if (r.status === 409 || r.status === 422) return 'conflicto';
+  if (!r.ok) throw new Error(`PUT ${r.status}`);
+  return 'ok';
+}
+
+function pintaSync() {
+  const el = $('#syncstate');
+  if (el) el.textContent = syncEstado;
+}
+
+async function sincronizar() {
+  if (!D.config || syncBusy) { if (!D.config) { syncEstado = 'Marcas solo en este móvil (sin sincronización).'; pintaSync(); } return; }
+  if (!navigator.onLine) { syncEstado = '📴 Sin conexión: se guarda en el móvil y se sincroniza al volver.'; pintaSync(); return; }
+  syncBusy = true;
+  try {
+    for (let i = 0; i < 3; i++) {
+      const r = await ghEstado('GET');
+      const st = store('check') || {};
+      const tm = store('checkt') || {};
+      const fusion = { ...r.data };
+      let cambioLocal = false, cambioRemoto = false;
+      new Set([...Object.keys(st), ...Object.keys(r.data)]).forEach((k) => {
+        const lt = tm[k] ?? (st[k] ? 1 : 0);
+        const rt = (r.data[k] && r.data[k].t) || 0;
+        if (lt > rt) { fusion[k] = { v: !!st[k], t: lt }; cambioRemoto = true; }
+        else if (rt > lt) { st[k] = !!r.data[k].v; tm[k] = rt; cambioLocal = true; }
+      });
+      if (cambioLocal) { store('check', st); store('checkt', tm); }
+      if (cambioRemoto) {
+        const res = await ghEstado('PUT', fusion, r.sha);
+        if (res === 'conflicto') { await new Promise((ok) => setTimeout(ok, 400 * (i + 1))); continue; }
+      }
+      syncEstado = `🔄 Sincronizado a las ${new Date().toTimeString().slice(0, 5)}`;
+      pintaSync();
+      if (cambioLocal && tab === 'check') renderConservando();
+      return;
+    }
+    syncEstado = '⚠️ No se pudo sincronizar (conflicto). Se reintentará.';
+  } catch (e) {
+    syncEstado = '📴 Sin conexión con el servidor: se guarda en el móvil y se sincroniza al volver.';
+  } finally {
+    syncBusy = false;
+    pintaSync();
+  }
+}
+
+function programaSync(ms = 1500) {
+  clearTimeout(programaSync.t);
+  programaSync.t = setTimeout(sincronizar, ms);
+}
+
+function renderConservando() {
+  const y = window.scrollY;
+  render();
+  window.scrollTo(0, y);
+}
+
+window.addEventListener('online', () => programaSync(500));
+document.addEventListener('visibilitychange', () => { if (!document.hidden && tab === 'check') programaSync(300); });
+
 /* ---------- Render ---------- */
 
 function render(arg) {
   clearInterval(timer);
+  clearInterval(syncTimer);
   const [title, fn] = VIEWS[tab];
   $('#title').textContent = title;
   $('#main').innerHTML = fn(arg);
@@ -289,6 +375,11 @@ function render(arg) {
   tick();
   if (tab === 'mapas') afterMapas(arg);
   if ($('#cuenta')) timer = setInterval(tick, 1000);
+  if (tab === 'check') {
+    pintaSync();
+    programaSync(300);
+    syncTimer = setInterval(sincronizar, 60000);
+  }
 }
 
 function tick() {
@@ -334,9 +425,13 @@ document.addEventListener('toggle', (e) => {
 document.addEventListener('change', (e) => {
   if (e.target.dataset.chk) {
     const st = store('check') || {};
+    const tm = store('checkt') || {};
     st[e.target.dataset.chk] = e.target.checked;
+    tm[e.target.dataset.chk] = Date.now();
     store('check', st);
-    render();
+    store('checkt', tm);
+    renderConservando();
+    programaSync();
   } else if (e.target.id === 'simsel') {
     simDate = e.target.value || null;
     render();
@@ -435,4 +530,5 @@ async function downloadMaps() {
     return;
   }
   render();
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 })();

@@ -11,6 +11,14 @@ const crypto = require('crypto');
 const path = require('path');
 const read = (f) => fs.readFileSync(path.join(__dirname, f), 'utf8');
 
+// Variables de .env (no pisan las que ya estén definidas en el entorno)
+try {
+  for (const l of read('.env').split(/\r?\n/)) {
+    const m = /^\s*([A-Z_]+)\s*=\s*(.*)$/.exec(l);
+    if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2].trim().replace(/^['"]|['"]$/g, '');
+  }
+} catch (e) { /* sin .env */ }
+
 /* --- Iconos --- */
 function crc32(buf) {
   let c, crc = ~0;
@@ -68,8 +76,18 @@ const ITER = 200000;
 const salt = crypto.randomBytes(16);
 const iv = crypto.randomBytes(12);
 const key = crypto.pbkdf2Sync(code, salt, ITER, 32, 'sha256');
+const payload = { ...priv };
+const repoEstado = (process.env.CRUCERO_ESTADO || '').trim();
+const tokenEstado = (process.env.CRUCERO_TOKEN || '').trim();
+if (repoEstado && tokenEstado) {
+  payload.config = { repo: repoEstado, token: tokenEstado };
+  if (process.env.CRUCERO_API) payload.config.api = process.env.CRUCERO_API.trim(); // solo para pruebas
+  console.log('Sincronización del checklist: ACTIVADA (' + repoEstado + ')');
+} else {
+  console.log('Sincronización del checklist: desactivada (faltan CRUCERO_ESTADO y CRUCERO_TOKEN)');
+}
 const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-const ct = Buffer.concat([cipher.update(JSON.stringify(priv), 'utf8'), cipher.final(), cipher.getAuthTag()]);
+const ct = Buffer.concat([cipher.update(JSON.stringify(payload), 'utf8'), cipher.final(), cipher.getAuthTag()]);
 fs.writeFileSync(
   path.join(__dirname, 'data/datos.enc'),
   JSON.stringify({ v: 1, iter: ITER, salt: salt.toString('base64'), iv: iv.toString('base64'), ct: ct.toString('base64') })
