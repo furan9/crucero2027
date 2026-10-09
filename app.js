@@ -10,13 +10,12 @@ let simDate = null; // fecha simulada para probar (YYYY-MM-DD)
 let tab = 'hoy';
 let timer = null;
 
-const ICON = { tunez: '🕌', palermo: '⛪', napoles: '🍕', livorno: '🏊', marsella: '⚓' };
+const ICON = { tunez: '🕌', palermo: '⛪', napoles: '🍕', livorno: '🚆', marsella: '⚓' };
 function iconoDia(d) {
   if (d.escala) return ICON[d.escala];
   return d.titulo.includes('embarque') ? '🛳️' : d.titulo.includes('desembarque') ? '🚗' : '🌊';
 }
 function tipoDia(d) {
-  if (d.escala === 'livorno') return 'barco';
   if (d.escala) return 'puerto';
   return d.titulo.includes('Navegación') ? 'mar' : 'base';
 }
@@ -193,7 +192,7 @@ function viewEscalas(id) {
       <table>${e.horario.map((h) => `<tr><td class="hh">${esc(h.hora)}</td><td>${esc(h.texto)}</td></tr>`).join('')}</table>
       <h4>🚆 Cómo llegar</h4><p>${esc(e.como_llegar)}</p>
       ${list('💶 Precios', e.precios)}${list('💡 Consejos', e.consejos)}${list('🔀 Alternativas', e.alternativas)}</div>
-      ${e.florencia ? viewOpcion(e.florencia) : ''}
+      ${(e.opciones || []).map(viewOpcion).join('')}
       ${(D.lugares.escalas[id] || []).map((r) => `<button class="btn" data-map="${r}">🗺️ Mapa: ${esc(D.lugares.regiones[r].nombre)}</button>`).join('')}`;
   }
   return Object.entries(D.escalas)

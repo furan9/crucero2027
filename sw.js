@@ -1,4 +1,4 @@
-const CACHE = 'crucero-v14';
+const CACHE = 'crucero-v15';
 const MAPCACHE = 'crucero-maps-v1';
 const ASSETS = [
   './', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png',

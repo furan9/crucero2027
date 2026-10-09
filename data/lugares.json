@@ -34,7 +34,7 @@
         40.845
       ],
       "zoom": 13,
-      "mb": 5.0
+      "mb": 5
     },
     "pompeya": {
       "nombre": "Pompeya",
@@ -71,6 +71,15 @@
       ],
       "zoom": 14,
       "mb": 6.5
+    },
+    "pisa": {
+      "nombre": "Pisa (excursión desde Livorno)",
+      "centro": [
+        10.3985,
+        43.716
+      ],
+      "zoom": 14,
+      "mb": 3
     }
   },
   "escalas": {
@@ -86,7 +95,8 @@
     ],
     "livorno": [
       "livorno",
-      "florencia"
+      "florencia",
+      "pisa"
     ],
     "marsella": [
       "marsella"
@@ -242,6 +252,24 @@
       "nombre": "Galería Uffizi",
       "lat": 43.7678,
       "lon": 11.2553
+    },
+    {
+      "region": "pisa",
+      "nombre": "Estación Pisa Centrale",
+      "lat": 43.7086,
+      "lon": 10.3987
+    },
+    {
+      "region": "pisa",
+      "nombre": "Plaza de los Milagros (Piazza dei Miracoli)",
+      "lat": 43.723,
+      "lon": 10.3966
+    },
+    {
+      "region": "pisa",
+      "nombre": "Torre inclinada",
+      "lat": 43.7229,
+      "lon": 10.3966
     }
   ]
 }
