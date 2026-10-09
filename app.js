@@ -243,7 +243,7 @@ function estadoTexto() {
   return l.join('\n');
 }
 
-const INFOICON = { 'Crucero': '🚢', 'Cabinas': '🛏️', 'El barco: MSC Virtuosa': '🎼', 'Qué incluye la tarifa': '🎟️', 'Internet y móvil': '📶', 'Incluido a bordo': '✅', 'De pago a bordo': '💳', 'Aparcamiento Barcelona': '🅿️', 'Documentación': '🛂', 'Regla de oro': '⚠️', 'Coste del plan': '💶', 'Contactos': '📞' };
+const INFOICON = { 'Crucero': '🚢', 'Cabinas': '🛏️', 'El barco: MSC Virtuosa': '🎼', 'Qué incluye la tarifa': '🎟️', 'Internet y móvil': '📶', 'Incluido a bordo': '✅', 'De pago a bordo': '💳', 'Aparcamiento Barcelona': '🅿️', 'Documentación': '🛂', 'Regla de oro': '⚠️', 'Coste del plan': '💶', 'Contactos': '📞', 'A bordo: imprescindibles': '🎡', 'A bordo: espectáculos': '🎭', 'A bordo: niños y mayores': '🧒', 'A bordo: consejos de otros pasajeros': '💬', 'A bordo: críticas frecuentes': '⚠️', 'A bordo: nota': 'ℹ️' };
 function viewInfo() {
   return Object.entries(D.info)
     .map(([t, arr]) => `<div class="card"><h3>${INFOICON[t] || 'ℹ️'} ${esc(t)}</h3><ul>${arr.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`)
